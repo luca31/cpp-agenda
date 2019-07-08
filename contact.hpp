@@ -6,8 +6,10 @@ class Contact {
         long long int number;
         int birthday[2];
         
-        Contact(string name_, string surname_, long long int number_, string address_, string email_ ,int birthday_[2]);
-        int edit(string type);
+        Contact(string name_, string surname_, long long int number_, string address_, string email_);
+        int edit(string type, string change);
+        int edit (string type, long long int change);
+
 
 };
 
