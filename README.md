@@ -1,1 +1,1 @@
-# cpp-agenda
+# C++ agenda
