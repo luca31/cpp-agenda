@@ -15,6 +15,7 @@ class Interface::Interface {
 public:
     Interface(void);
     std::vector<Contact> contacts;
+    int actualContact;
     short page;
     void list();
     void add();
