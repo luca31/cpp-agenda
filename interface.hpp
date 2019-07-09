@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 #include <vector>
+#include <string>
+#include "contact.hpp"
+
+using namespace std;
 
 namespace Interface{
     class Interface;
@@ -10,13 +14,16 @@ namespace Interface{
 class Interface::Interface {
 public:
     Interface(void);
-    std::vector<int> contacts;
-    short int page;
+    std::vector<Contact> contacts;
+    short page;
     void list();
+    void add();
+    void view();
     void search();
     void edit();
-    void add();
     void remove();
+    void askForValue(string name, string &value, bool needed);
+    void askForValue(string name, long long int &value);
 };
 
 #endif
