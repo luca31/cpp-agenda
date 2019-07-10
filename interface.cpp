@@ -6,7 +6,7 @@ using namespace std;
 
 Interface::Interface::Interface(void) {
     // caricare i contatti tramite un file json
-    contacts.push_back(Contact("Mario","Rossi",6453547,"",""));
+    contacts.push_back(Contact("Mario","Rossi",6453547,"via Roma, 7","mario.rossi@email.com"));
     contacts.push_back(Contact("Dario","Ferrari",7588736,"",""));
     contacts.push_back(Contact("Giovanni","Bianchi",8934576,"",""));
     contacts.push_back(Contact("Luca","Gastaldi",3467579,"",""));
@@ -17,16 +17,20 @@ Interface::Interface::Interface(void) {
 
 void Interface::Interface::askForValue(string name, string &value, bool needed=false){
     while (true){
-        cout << name << ": ";
-        cin >> value;
-        cout << endl;
-        break;
+        cout << (needed?"*":"") << name << ": ";
+        getline(cin, value);
+        if(needed && value.empty()){
+            cout << "  -> Questo campo è obbligatorio!" << endl;
+        } else {
+            cout << endl;
+            break;
+        }
     }
 }
 
 void Interface::Interface::askForValue(string name, long long int &value){
     while (true){
-        cout << name << ": ";
+        cout << "*" << name << ": ";
         cin >> value;
         if(cin.fail()) {
             cin.clear();
@@ -71,26 +75,36 @@ void Interface::Interface::list(){ // page 1
 }
 
 void Interface::Interface::add(){ // page 2
-    string name, lname;
+    string tmp, name, lname, address, email;
     long long int number;
     
+    getline(cin,tmp);
     cout << "AGGIUNGI CONTATTO" << endl << endl;
-    askForValue("Nome", name);
-    askForValue("Cognome", lname);
+    askForValue("Nome", name, true);
+    askForValue("Cognome", lname, true);
     askForValue("Numero di telefono", number);
+    getline(cin,tmp);
+    askForValue("Indirizzo di casa", address);
+    askForValue("Indirizzo email", email);
     
-    contacts.push_back(Contact(name, lname, number, "", ""));
+    contacts.push_back(Contact(name, lname, number, address, email));
     
     page = 1;
 }
 
 void Interface::Interface::view(){ // page 3
     string command;
-    
+    Contact contact = contacts[actualContact];
     cout << "CONTATTO" << endl << endl;
-    cout << "Nome: " << contacts[actualContact].name << endl << endl;
-    cout << "Cognome: " << contacts[actualContact].lname << endl << endl;
-    cout << "Numero di telefono: " << contacts[actualContact].number << endl << endl;
+    cout << "Nome: " << contact.name << endl << endl;
+    cout << "Cognome: " << contact.lname << endl << endl;
+    cout << "Numero di telefono: " << contact.number << endl << endl;
+    if(contact.address!=""){
+        cout << "Indirizzo di casa: " << contact.address << endl << endl;
+    }
+    if(contact.email!=""){
+        cout << "Indirizzo email: " << contact.email << endl << endl;
+    }
     cout << "----------" << endl;
     cout << "1: Indietro" << endl;
     cout << "2: Rimuovi" << endl;
