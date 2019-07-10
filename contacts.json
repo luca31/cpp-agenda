@@ -3,8 +3,8 @@
         "name":"Mario",
         "surname":"Rossi",
         "number":6453547,
-        "address":"",
-        "email":""
+        "address":"via Roma, 7",
+        "email":"mario.rossi@email.com"
     },
 
     "person2":{

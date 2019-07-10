@@ -15,6 +15,12 @@ int main(){
             case 2:
                 interface.add();
                 break;
+            case 3:
+                interface.view();
+                break;
+            case 4:
+                interface.remove();
+                break;
             default:
                 interface.page = 0;
                 break;
