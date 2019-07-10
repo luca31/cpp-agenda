@@ -4,10 +4,12 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include <fstream>
+#include "json.hpp"
 #include "contact.hpp"
 
 using namespace std;
-
+using json = nlohmann::json;
 namespace Interface{
     class Interface;
 }
@@ -24,6 +26,10 @@ public:
     void remove();
     void askForValue(string name, string &value, bool needed);
     void askForValue(string name, long long int &value);
+private:
+    ifstream file_contacts("contacts.json");
+    json contacts_json;
+
 };
 
 #endif

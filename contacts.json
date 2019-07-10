@@ -1,0 +1,17 @@
+{
+    "person1":{
+        "name":"Mario",
+        "surname":"Rossi",
+        "number":6453547,
+        "address":"",
+        "email":""
+    },
+
+    "person2":{
+        "name":"jfh",
+        "surname":"jdjf",
+        "number":98676,
+        "address":"",
+        "email":""
+    }
+}

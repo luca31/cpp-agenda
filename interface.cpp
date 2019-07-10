@@ -1,16 +1,18 @@
 #include <iostream>
 #include <string>
 #include "interface.hpp"
+#include "contact.hpp"
+#include "json.hpp"
 
 using namespace std;
-
+using json = nlohmann::json;
 Interface::Interface::Interface(void) {
     // caricare i contatti tramite un file json
-    contacts.push_back(Contact("Mario","Rossi",6453547,"",""));
-    contacts.push_back(Contact("Dario","Ferrari",7588736,"",""));
-    contacts.push_back(Contact("Giovanni","Bianchi",8934576,"",""));
-    contacts.push_back(Contact("Luca","Gsstaldi",3467579,"",""));
-    contacts.push_back(Contact("Pietro","Biondi",9128037,"",""));
+    file_contacs >> contacts_json;
+    for(auto contact : contacts_json){
+        contacts.push_back(Contact(contact["name"],contact["surname"],contact["number"],contact["address"],contact["email"]));
+    }
+    
     page=1;
 }
 
@@ -74,3 +76,4 @@ void Interface::Interface::add(){ // page 2
     
     page = 1;
 }
+
