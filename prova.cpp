@@ -1,9 +1,23 @@
 #include <iostream>
- using namespace std;
+#include <fstream>
+#include <assert.h>
+#include <string>
 
- int main(){
+
+#include "rapidjson/document.h"
+
+using namespace std;
+using namespace rapidjson;
+int main(){
     char n;
-    cout<<"hello";
-    cin>>n;
+   
+    string b = "ehi";
+    string c = "d";
+
+    cout << b+c;
+    cin >> n;
     return 0;
- }
+
+
+     }   
+  

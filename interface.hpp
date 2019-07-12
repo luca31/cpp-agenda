@@ -5,12 +5,12 @@
 #include <vector>
 #include <string>
 #include "contact.hpp"
-
 using namespace std;
 
 namespace Interface{
     class Interface;
 }
+
 class Interface::Interface {
 public:
     Interface(void);
@@ -25,6 +25,7 @@ public:
     void remove();
     void askForValue(string name, string &value, bool needed);
     void askForValue(string name, long long int &value);
+
 };
 
 #endif

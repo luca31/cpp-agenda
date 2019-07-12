@@ -1,16 +1,30 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "interface.hpp"
+#include "rapidjson/document.h"
+
 
 using namespace std;
+using namespace rapidjson;
 
 Interface::Interface::Interface(void) {
-    // caricare i contatti tramite un file json
-    contacts.push_back(Contact("Mario","Rossi",6453547,"via Roma, 7","mario.rossi@email.com"));
-    contacts.push_back(Contact("Dario","Ferrari",7588736,"",""));
-    contacts.push_back(Contact("Giovanni","Bianchi",8934576,"",""));
-    contacts.push_back(Contact("Luca","Gastaldi",3467579,"",""));
-    contacts.push_back(Contact("Pietro","Biondi",9128037,"",""));
+    string contact;
+    ifstream file_contacts("contacts.json");
+    assert(file_contacts.is_open());
+    
+    while(getline(file_contacts,contact)){
+        char line[contact.length() + 1];
+        strcpy(line, contact.c_str()); 
+        Document contacts_json;
+        contacts_json.Parse(line);
+        assert(contacts_json.IsObject());
+        contacts.push_back(Contact(contacts_json["name"].GetString(),contacts_json["surname"].GetString(),stoll(contacts_json["number"].GetString()),contacts_json["address"].GetString(),contacts_json["email"].GetString()));
+        
+
+    }
+
+    file_contacts.close();
     page=1;
     actualContact = 0;
 }
@@ -90,6 +104,10 @@ void Interface::Interface::add(){ // page 2
     
     contacts.push_back(Contact(name, lname, number, address, email));
     
+    /*ofstream file_contacts("contacts.json");
+    assert(file_contacts.is_open());
+    file_contacts << "{'name':"+ name +",'surname':" + lname +",'number':" + to_string(number) +",'address':" + address + ",'email':" + email + "}\n";
+    file_contacts.close();*/
     page = 1;
 }
 
