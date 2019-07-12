@@ -1,19 +1,16 @@
 #include <iostream>
 #include <string>
 #include "interface.hpp"
-#include "contact.hpp"
-#include "json.hpp"
 
 using namespace std;
-using json = nlohmann::json;
+
 Interface::Interface::Interface(void) {
     // caricare i contatti tramite un file json
-<<<<<<< HEAD
-    file_contacs >> contacts_json;
-    for(auto contact : contacts_json){
-        contacts.push_back(Contact(contact["name"],contact["surname"],contact["number"],contact["address"],contact["email"]));
-    }
-    
+    contacts.push_back(Contact("Mario","Rossi",6453547,"via Roma, 7","mario.rossi@email.com"));
+    contacts.push_back(Contact("Dario","Ferrari",7588736,"",""));
+    contacts.push_back(Contact("Giovanni","Bianchi",8934576,"",""));
+    contacts.push_back(Contact("Luca","Gastaldi",3467579,"",""));
+    contacts.push_back(Contact("Pietro","Biondi",9128037,"",""));
     page=1;
     actualContact = 0;
 }
@@ -37,7 +34,8 @@ void Interface::Interface::askForValue(string name, long long int &value){
         cin >> value;
         if(cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            // qui mi dava errore numeric_limits<streamsize>::max() dunque l'ho cambiato in base a ciò che ho capiro del codice
+            cin.ignore(100000000,'\n');
             cout << "  -> Il numero inserito non è corretto!" << endl;
         } else {
             cout << endl;
@@ -95,8 +93,6 @@ void Interface::Interface::add(){ // page 2
     page = 1;
 }
 
-<<<<<<< HEAD
-=======
 void Interface::Interface::view(){ // page 3
     string command;
     Contact contact = contacts[actualContact];
@@ -138,4 +134,3 @@ void Interface::Interface::remove(){ // page 4
         return;
     }
 }
-

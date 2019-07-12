@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(){
-    Interface interface();
+    Interface::Interface interface;
     
     while(interface.page){
         switch(interface.page){

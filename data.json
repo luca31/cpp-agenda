@@ -1,6 +1,0 @@
-{
-    "contacts" = [
-        {"name":"Mario", "lname":"Rossi", "number":6453547, "address":"via Roma, 7", "email":"mario.rossi@email.com"},
-        {"name":"Dario", "lname":"Ferrari", "number":7588736, "address":"", "email":""}
-    ]
-}
