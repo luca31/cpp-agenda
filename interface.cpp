@@ -4,24 +4,32 @@
 #include "interface.hpp"
 #include "rapidjson/document.h"
 
-
 using namespace std;
 using namespace rapidjson;
 
 Interface::Interface::Interface(void) {
     string contact;
     ifstream file_contacts("contacts.json");
-    assert(file_contacts.is_open());
-    
-    while(getline(file_contacts,contact)){
-        char line[contact.length() + 1];
-        strcpy(line, contact.c_str()); 
-        Document contacts_json;
-        contacts_json.Parse(line);
-        assert(contacts_json.IsObject());
-        contacts.push_back(Contact(contacts_json["name"].GetString(),contacts_json["surname"].GetString(),stoll(contacts_json["number"].GetString()),contacts_json["address"].GetString(),contacts_json["email"].GetString()));
-        
-
+    if(!file_contacts.is_open()){
+        ofstream new_file_contacts("contacts.json");
+        if(new_file_contacts.is_open()){
+            new_file_contacts << "";
+            new_file_contacts.close();
+            cout << "A causa di un errore è stato necessario ripristinare l'archivio dei contatti" << endl << endl;
+        } else {
+            cout << "Si è verificato un errore durante il caricamento dell'archivio" << endl << endl;
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        while(getline(file_contacts,contact)){
+            char line[contact.length() + 1];
+            strcpy(line, contact.c_str());
+            Document contacts_json;
+            contacts_json.Parse(line);
+            if(contacts_json.IsObject()) {
+                contacts.push_back(Contact(contacts_json["name"].GetString(),contacts_json["lname"].GetString(),stoll(contacts_json["number"].GetString()),contacts_json["address"].GetString(),contacts_json["email"].GetString()));
+            }
+        }
     }
 
     file_contacts.close();
@@ -104,10 +112,14 @@ void Interface::Interface::add(){ // page 2
     
     contacts.push_back(Contact(name, lname, number, address, email));
     
-    /*ofstream file_contacts("contacts.json");
+    ofstream file_contacts("contacts.json");
     assert(file_contacts.is_open());
-    file_contacts << "{'name':"+ name +",'surname':" + lname +",'number':" + to_string(number) +",'address':" + address + ",'email':" + email + "}\n";
-    file_contacts.close();*/
+    for(int x = 0; x < contacts.size(); x++){
+        Contact cnt = contacts[x];
+        file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":\"" << to_string(cnt.number) << "\",\"address\":\"" << cnt.address << "\",\"email\":\"" << cnt.email << "\"}\n";
+    }
+    file_contacts.close();
+    
     page = 1;
 }
 
@@ -145,6 +157,13 @@ void Interface::Interface::remove(){ // page 4
     cin >> command;
     if(command=="s") {
         contacts.erase(contacts.begin()+actualContact);
+        ofstream file_contacts("contacts.json");
+        assert(file_contacts.is_open());
+        for(int x = 0; x < contacts.size(); x++){
+            Contact cnt = contacts[x];
+            file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":\"" << to_string(cnt.number) << "\",\"address\":\"" << cnt.address << "\",\"email\":\"" << cnt.email << "\"}\n";
+        }
+        file_contacts.close();
         page=1;
         return;
     } else if(command=="n") {
