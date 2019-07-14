@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Contact::Contact(string name_, string lname_, long long int number_, string address_ ,string email_){
-    name = name_;
-    lname = lname_;
-    number = number_;
-    address = address_;
-    email = email_;
+Contact::Contact(string newName, string newLname, long long int newNumber, string newAddress="" ,string newEmail=""){
+    name = newName;
+    lname = newLname;
+    number = newNumber;
+    address = newAddress;
+    email = newEmail;
 }
 
 void Contact::edit(string type, string change){

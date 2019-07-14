@@ -27,7 +27,13 @@ Interface::Interface::Interface(void) {
             Document contacts_json;
             contacts_json.Parse(line);
             if(contacts_json.IsObject()) {
-                contacts.push_back(Contact(contacts_json["name"].GetString(),contacts_json["lname"].GetString(),stoll(contacts_json["number"].GetString()),contacts_json["address"].GetString(),contacts_json["email"].GetString()));
+                contacts.push_back(Contact(
+                    contacts_json["name"].GetString(),
+                    contacts_json["lname"].GetString(),
+                    contacts_json["number"].GetInt(),
+                    contacts_json.HasMember("address")?contacts_json["address"].GetString():"",
+                    contacts_json.HasMember("email")?contacts_json["email"].GetString():""
+                ));
             }
         }
     }
@@ -116,10 +122,13 @@ void Interface::Interface::add(){ // page 2
     assert(file_contacts.is_open());
     for(int x = 0; x < contacts.size(); x++){
         Contact cnt = contacts[x];
-        file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":\"" << to_string(cnt.number) << "\",\"address\":\"" << cnt.address << "\",\"email\":\"" << cnt.email << "\"}\n";
+        file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":" << cnt.number;
+        if(!cnt.address.empty()) file_contacts << ",\"address\":\"" << cnt.address << "\"";
+        if(!cnt.email.empty()) file_contacts << ",\"email\":\"" << cnt.email << "\"";
+        file_contacts << "}\n";
     }
     file_contacts.close();
-    
+
     page = 1;
 }
 
@@ -161,7 +170,10 @@ void Interface::Interface::remove(){ // page 4
         assert(file_contacts.is_open());
         for(int x = 0; x < contacts.size(); x++){
             Contact cnt = contacts[x];
-            file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":\"" << to_string(cnt.number) << "\",\"address\":\"" << cnt.address << "\",\"email\":\"" << cnt.email << "\"}\n";
+            file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":" << cnt.number;
+            if(!cnt.address.empty()) file_contacts << ",\"address\":\"" << cnt.address << "\"";
+            if(!cnt.email.empty()) file_contacts << ",\"email\":\"" << cnt.email << "\"";
+            file_contacts << "}\n";
         }
         file_contacts.close();
         page=1;
