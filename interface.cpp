@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <fstream>
 #include "interface.hpp"
 #include "rapidjson/document.h"
 
@@ -8,37 +7,11 @@ using namespace std;
 using namespace rapidjson;
 
 Interface::Interface::Interface(void) {
-    string contact;
-    ifstream file_contacts("contacts.json");
-    if(!file_contacts.is_open()){
-        ofstream new_file_contacts("contacts.json");
-        if(new_file_contacts.is_open()){
-            new_file_contacts << "";
-            new_file_contacts.close();
-            cout << "A causa di un errore è stato necessario ripristinare l'archivio dei contatti" << endl << endl;
-        } else {
-            cout << "Si è verificato un errore durante il caricamento dell'archivio" << endl << endl;
-            exit(EXIT_FAILURE);
-        }
-    } else {
-        while(getline(file_contacts,contact)){
-            char line[contact.length() + 1];
-            strcpy(line, contact.c_str());
-            Document contacts_json;
-            contacts_json.Parse(line);
-            if(contacts_json.IsObject()) {
-                contacts.push_back(Contact(
-                    contacts_json["name"].GetString(),
-                    contacts_json["lname"].GetString(),
-                    contacts_json["number"].GetInt(),
-                    contacts_json.HasMember("address")?contacts_json["address"].GetString():"",
-                    contacts_json.HasMember("email")?contacts_json["email"].GetString():""
-                ));
-            }
-        }
+    if(!db.getContacts()) {
+        cout << "Si è verificato un errore durante il caricamento dell'archivio" << endl << endl;
+        exit(EXIT_FAILURE);
     }
-
-    file_contacts.close();
+    
     page=1;
     actualContact = 0;
 }
@@ -62,8 +35,7 @@ void Interface::Interface::askForValue(string name, long long int &value){
         cin >> value;
         if(cin.fail()) {
             cin.clear();
-            // qui mi dava errore numeric_limits<streamsize>::max() dunque l'ho cambiato in base a ciò che ho capiro del codice
-            cin.ignore(100000000,'\n');
+            cin.ignore(99999999999,'\n');
             cout << "  -> Il numero inserito non è corretto!" << endl;
         } else {
             cout << endl;
@@ -76,11 +48,11 @@ void Interface::Interface::askForValue(string name, long long int &value){
 
 void Interface::Interface::list(){ // page 1
     string command;
-    long size = contacts.size();
+    long size = db.contacts.size();
     
     cout << "I TUOI CONTATTI" << endl << endl;
     for(int x=0; x<size; x++){
-        cout<< x+1 << ": " << contacts[x].name << " " << contacts[x].lname << endl;
+        cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
     }
     cout << "----------" << endl;
     cout << size+1 << ": Aggiungi contatto" << endl;
@@ -116,25 +88,16 @@ void Interface::Interface::add(){ // page 2
     askForValue("Indirizzo di casa", address);
     askForValue("Indirizzo email", email);
     
-    contacts.push_back(Contact(name, lname, number, address, email));
+    db.contacts.push_back(Contact(name, lname, number, address, email));
     
-    ofstream file_contacts("contacts.json");
-    assert(file_contacts.is_open());
-    for(int x = 0; x < contacts.size(); x++){
-        Contact cnt = contacts[x];
-        file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":" << cnt.number;
-        if(!cnt.address.empty()) file_contacts << ",\"address\":\"" << cnt.address << "\"";
-        if(!cnt.email.empty()) file_contacts << ",\"email\":\"" << cnt.email << "\"";
-        file_contacts << "}\n";
-    }
-    file_contacts.close();
+    db.putContacts();
 
     page = 1;
 }
 
 void Interface::Interface::view(){ // page 3
     string command;
-    Contact contact = contacts[actualContact];
+    Contact contact = db.contacts[actualContact];
     cout << "CONTATTO" << endl << endl;
     cout << "Nome: " << contact.name << endl << endl;
     cout << "Cognome: " << contact.lname << endl << endl;
@@ -162,20 +125,11 @@ void Interface::Interface::view(){ // page 3
 void Interface::Interface::remove(){ // page 4
     string command;
     
-    cout << "Vuoi davvero eliminare " << contacts[actualContact].name << " " << contacts[actualContact].lname << "? (s/n) ";
+    cout << "Vuoi davvero eliminare " << db.contacts[actualContact].name << " " << db.contacts[actualContact].lname << "? (s/n) ";
     cin >> command;
     if(command=="s") {
-        contacts.erase(contacts.begin()+actualContact);
-        ofstream file_contacts("contacts.json");
-        assert(file_contacts.is_open());
-        for(int x = 0; x < contacts.size(); x++){
-            Contact cnt = contacts[x];
-            file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":" << cnt.number;
-            if(!cnt.address.empty()) file_contacts << ",\"address\":\"" << cnt.address << "\"";
-            if(!cnt.email.empty()) file_contacts << ",\"email\":\"" << cnt.email << "\"";
-            file_contacts << "}\n";
-        }
-        file_contacts.close();
+        db.contacts.erase(db.contacts.begin()+actualContact);
+        db.putContacts();
         page=1;
         return;
     } else if(command=="n") {

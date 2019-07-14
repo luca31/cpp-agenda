@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include "contact.hpp"
+#include "dbManager.hpp"
+
 using namespace std;
 
 namespace Interface{
@@ -14,7 +16,7 @@ namespace Interface{
 class Interface::Interface {
 public:
     Interface(void);
-    std::vector<Contact> contacts;
+    DbManager::DbManager db;
     int actualContact;
     short page;
     void list();
@@ -25,7 +27,6 @@ public:
     void remove();
     void askForValue(string name, string &value, bool needed);
     void askForValue(string name, long long int &value);
-
 };
 
 #endif
