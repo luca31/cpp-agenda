@@ -47,7 +47,7 @@ void Interface::Interface::askForValue(string name, long long int &value){
 // PAGES
 
 void Interface::Interface::list(){ // page 1
-    string command;
+    int command;
     long size = db.contacts.size();
     
     cout << "I TUOI CONTATTI" << endl << endl;
@@ -59,17 +59,22 @@ void Interface::Interface::list(){ // page 1
     cout << size+2 << ": Esci" << endl;
     
     cin >> command;
+    if(cin.fail()) {
+        cin.clear();
+        cin.ignore(999,'\n');
+    }
+
     for(int x=0; x<size; x++){
-        if(stoi(command)-1==x) {
+        if(command-1==x) {
             page=3;
             actualContact=x;
             return;
         }
     }
-    if(stoi(command)==size+1) {
+    if(command==size+1) {
         page=2;
         return;
-    } else if(stoi(command)==size+2) {
+    } else if(command==size+2) {
         page=0;
         return;
     }
@@ -96,7 +101,7 @@ void Interface::Interface::add(){ // page 2
 }
 
 void Interface::Interface::view(){ // page 3
-    string command;
+    int command;
     Contact contact = db.contacts[actualContact];
     cout << "CONTATTO" << endl << endl;
     cout << "Nome: " << contact.name << endl << endl;
@@ -113,26 +118,32 @@ void Interface::Interface::view(){ // page 3
     cout << "2: Rimuovi" << endl;
     
     cin >> command;
-    if(stoi(command)==1) {
+    if(cin.fail()) {
+        cin.clear();
+        cin.ignore(999,'\n');
+    }
+    if(command==1) {
         page=1;
         return;
-    } else if(stoi(command)==2) {
+    } else if(command==2) {
         page=4;
         return;
     }
 }
 
 void Interface::Interface::remove(){ // page 4
-    string command;
+    char command;
     
     cout << "Vuoi davvero eliminare " << db.contacts[actualContact].name << " " << db.contacts[actualContact].lname << "? (s/n) ";
     cin >> command;
-    if(command=="s") {
+    cin.clear();
+    cin.ignore(255,'\n');
+    if(command=='s') {
         db.contacts.erase(db.contacts.begin()+actualContact);
         db.putContacts();
         page=1;
         return;
-    } else if(command=="n") {
+    } else if(command=='n') {
         page=1;
         return;
     }
