@@ -20,6 +20,9 @@ int main(){
             case 4:
                 interface.remove();
                 break;
+            case 5:
+                interface.edit();
+                break;
             default:
                 interface.page = 0;
                 break;

@@ -62,6 +62,7 @@ void Interface::Interface::list(){ // page 1
     if(cin.fail()) {
         cin.clear();
         cin.ignore(999,'\n');
+        return;
     }
 
     for(int x=0; x<size; x++){
@@ -71,13 +72,9 @@ void Interface::Interface::list(){ // page 1
             return;
         }
     }
-    if(command==size+1) {
-        page=2;
-        return;
-    } else if(command==size+2) {
-        page=0;
-        return;
-    }
+    
+    if(command==size+1) page=2;
+    else if(command==size+2) page=0;
 }
 
 void Interface::Interface::add(){ // page 2
@@ -116,19 +113,18 @@ void Interface::Interface::view(){ // page 3
     cout << "----------" << endl;
     cout << "1: Indietro" << endl;
     cout << "2: Rimuovi" << endl;
+    cout << "3: Modifica" << endl;
     
     cin >> command;
     if(cin.fail()) {
         cin.clear();
         cin.ignore(999,'\n');
-    }
-    if(command==1) {
-        page=1;
-        return;
-    } else if(command==2) {
-        page=4;
         return;
     }
+    
+    if(command==1) page=1;
+    else if(command==2) page=4;
+    else if(command==3) page=5;
 }
 
 void Interface::Interface::remove(){ // page 4
@@ -142,9 +138,41 @@ void Interface::Interface::remove(){ // page 4
         db.contacts.erase(db.contacts.begin()+actualContact);
         db.putContacts();
         page=1;
+    } else if(command=='n') page=1;
+}
+
+void Interface::Interface::edit(){ // page 5
+    int command;
+    string tmp;
+    
+    cout << "MODIFICA" << endl << endl;
+    
+    cout << "Quale campo si desidera modificare? " << endl << endl;
+    cout << "1: Nome (" << db.contacts[actualContact].name << ")" << endl;
+    cout << "2: Cognome (" << db.contacts[actualContact].lname << ")" << endl;
+    cout << "3: Numero di telefono (" << db.contacts[actualContact].number << ")" << endl;
+    cout << "4: Indirizzo di casa (" << (db.contacts[actualContact].address.empty()?"non specificato":db.contacts[actualContact].address) << ")" << endl;
+    cout << "5: Indirizzo email (" << (db.contacts[actualContact].email.empty()?"non specificato":db.contacts[actualContact].email) << ")" << endl;
+    cout << "6: Indietro" << endl;
+    
+    cin >> command;
+    if(cin.fail()) {
+        cin.clear();
+        cin.ignore(999,'\n');
         return;
-    } else if(command=='n') {
+    }
+    
+    if(command==6){
         page=1;
         return;
     }
+    
+    getline(cin,tmp);
+    if(command==1) askForValue("Nome", db.contacts[actualContact].name, true);
+    else if(command==2) askForValue("Cognome", db.contacts[actualContact].lname, true);
+    else if(command==3) askForValue("Numero di telefono", db.contacts[actualContact].number);
+    else if(command==4) askForValue("Indirizzo di casa", db.contacts[actualContact].address, false);
+    else if(command==5) askForValue("Indirizzo email", db.contacts[actualContact].email, false);
+    else return;
+    db.putContacts();
 }

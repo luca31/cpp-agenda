@@ -22,9 +22,8 @@ public:
     void list();
     void add();
     void view();
-    void search();
-    void edit();
     void remove();
+    void edit();
     void askForValue(string name, string &value, bool needed);
     void askForValue(string name, long long int &value);
 };
