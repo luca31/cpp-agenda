@@ -35,7 +35,7 @@ void Interface::Interface::askForValue(string name, long long int &value){
         cin >> value;
         if(cin.fail()) {
             cin.clear();
-            cin.ignore(99999999999,'\n');
+            cin.ignore(1215752191,'\n');
             cout << "  -> Il numero inserito non è corretto!" << endl;
         } else {
             cout << endl;
@@ -51,12 +51,13 @@ void Interface::Interface::list(){ // page 1
     long size = db.contacts.size();
     
     cout << "I TUOI CONTATTI" << endl << endl;
-    for(int x=0; x<size; x++){
+    for(int x = 0; x < size; x++){
         cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
     }
     cout << "----------" << endl;
     cout << size+1 << ": Aggiungi contatto" << endl;
-    cout << size+2 << ": Esci" << endl;
+    cout << size+2 << ": Cerca contatto" << endl;
+    cout << size+3 << ": Esci" << endl;
     
     cin >> command;
     if(cin.fail()) {
@@ -65,16 +66,17 @@ void Interface::Interface::list(){ // page 1
         return;
     }
 
-    for(int x=0; x<size; x++){
-        if(command-1==x) {
-            page=3;
-            actualContact=x;
+    for(int x = 0; x < size; x++){
+        if(command-1 == x) {
+            page = 3;
+            actualContact = x;
             return;
         }
     }
     
-    if(command==size+1) page=2;
-    else if(command==size+2) page=0;
+    if(command == size+1) page = 2;
+    else if(command == size+2) page = 6;
+    else if(command == size+3) page = 0;
 }
 
 void Interface::Interface::add(){ // page 2
@@ -99,15 +101,16 @@ void Interface::Interface::add(){ // page 2
 
 void Interface::Interface::view(){ // page 3
     int command;
+    
     Contact contact = db.contacts[actualContact];
     cout << "CONTATTO" << endl << endl;
     cout << "Nome: " << contact.name << endl << endl;
     cout << "Cognome: " << contact.lname << endl << endl;
     cout << "Numero di telefono: " << contact.number << endl << endl;
-    if(contact.address!=""){
+    if(contact.address != ""){
         cout << "Indirizzo di casa: " << contact.address << endl << endl;
     }
-    if(contact.email!=""){
+    if(contact.email != ""){
         cout << "Indirizzo email: " << contact.email << endl << endl;
     }
     cout << "----------" << endl;
@@ -122,9 +125,9 @@ void Interface::Interface::view(){ // page 3
         return;
     }
     
-    if(command==1) page=1;
-    else if(command==2) page=4;
-    else if(command==3) page=5;
+    if(command == 1) page = 1;
+    else if(command == 2) page = 4;
+    else if(command == 3) page = 5;
 }
 
 void Interface::Interface::remove(){ // page 4
@@ -134,11 +137,11 @@ void Interface::Interface::remove(){ // page 4
     cin >> command;
     cin.clear();
     cin.ignore(255,'\n');
-    if(command=='s') {
+    if(command == 's') {
         db.contacts.erase(db.contacts.begin()+actualContact);
         db.putContacts();
-        page=1;
-    } else if(command=='n') page=1;
+        page = 1;
+    } else if(command == 'n') page = 1;
 }
 
 void Interface::Interface::edit(){ // page 5
@@ -162,17 +165,73 @@ void Interface::Interface::edit(){ // page 5
         return;
     }
     
-    if(command==6){
-        page=1;
+    if(command == 6){
+        page = 1;
         return;
     }
     
     getline(cin,tmp);
-    if(command==1) askForValue("Nome", db.contacts[actualContact].name, true);
-    else if(command==2) askForValue("Cognome", db.contacts[actualContact].lname, true);
-    else if(command==3) askForValue("Numero di telefono", db.contacts[actualContact].number);
-    else if(command==4) askForValue("Indirizzo di casa", db.contacts[actualContact].address, false);
-    else if(command==5) askForValue("Indirizzo email", db.contacts[actualContact].email, false);
+    if(command == 1) askForValue("Nome", db.contacts[actualContact].name, true);
+    else if(command == 2) askForValue("Cognome", db.contacts[actualContact].lname, true);
+    else if(command == 3) askForValue("Numero di telefono", db.contacts[actualContact].number);
+    else if(command == 4) askForValue("Indirizzo di casa", db.contacts[actualContact].address, false);
+    else if(command == 5) askForValue("Indirizzo email", db.contacts[actualContact].email, false);
     else return;
     db.putContacts();
+}
+
+void Interface::Interface::search(){
+    int command;
+    long size = db.contacts.size();
+    
+    cout << "Criterio di ricerca:\n"  << "1:Nome\n" << "2:Cognome\n" << "3:Numero\n";
+    cin >> command;
+    if(cin.fail()){
+        cin.clear();
+        cin.ignore(999,'\n');
+        return;
+    };
+    
+
+    if(command == 1){
+        string value;
+        askForValue("Nome", value, true);
+        for( long x = 0; x < size; x++){
+            if(db.contacts[x].name == value) cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        };
+    }else if(command == 2){
+        string value;
+        askForValue("Cognome", value, true);
+        for( long x = 0; x < size; x++){
+            if(db.contacts[x].lname == value) cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        };
+    } else if(command == 3){
+        long long int value;
+        askForValue("Numero", value);
+        for( long x = 0; x < size; x++){
+            if(db.contacts[x].number == value) cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        };
+    }
+    cout << "----------" << endl;
+    cout << "0:Indietro" << endl;
+    cin >> command;
+
+    if(cin.fail()){
+        cin.clear();
+        cin.ignore(999,'\n');
+        return;
+    };
+
+    if(command == 0){
+        page = 1;
+        return;
+    }else{
+       for(long x = 0; x < size; x++){
+            if(command-1 == x) {
+                page = 3;
+                actualContact = x;
+                return;
+            };
+        };
+    };
 }
