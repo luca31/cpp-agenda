@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "interface.hpp"
 #include "rapidjson/document.h"
 
@@ -192,26 +193,49 @@ void Interface::Interface::search(){
         return;
     };
     
-
+    if(getenv("windir") == NULL){
+        system("clear");
+    }else{
+        system("cls");
+    };
+    
     if(command == 1){
         string value;
+        int it = 0;
         askForValue("Nome", value, true);
         for( long x = 0; x < size; x++){
-            if(db.contacts[x].name == value) cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+            if(db.contacts[x].name == value){
+                cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+                it++;
+            };
         };
+        if( it == 0) cout << "Nessun contatto trovato" << endl;
     }else if(command == 2){
         string value;
+        int it = 0;
+        
         askForValue("Cognome", value, true);
         for( long x = 0; x < size; x++){
-            if(db.contacts[x].lname == value) cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+            if(db.contacts[x].lname == value){
+                cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+                it++;
+            };
         };
+        if( it == 0) cout << "Nessun contatto trovato" << endl;
     } else if(command == 3){
         long long int value;
+        int it = 0;
+        
         askForValue("Numero", value);
         for( long x = 0; x < size; x++){
-            if(db.contacts[x].number == value) cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+            if(db.contacts[x].number == value){
+                cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+                it++;
+            };  
         };
-    }
+        if( it == 0) cout << "Nessun contatto trovato" << endl;
+    };
+    
     cout << "----------" << endl;
     cout << "0:Indietro" << endl;
     cin >> command;
