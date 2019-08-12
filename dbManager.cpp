@@ -1,5 +1,6 @@
 #include <fstream>
 #include <vector>
+#include <string>
 #include "dbManager.hpp"
 #include "rapidjson/document.h"
 
@@ -25,7 +26,7 @@ bool DbManager::DbManager::getContacts(){
                 contacts.push_back(Contact(
                     contacts_json["name"].GetString(),
                     contacts_json["lname"].GetString(),
-                    contacts_json["number"].GetInt(),
+                    stoll(contacts_json["number"].GetString()),
                     contacts_json.HasMember("address")?contacts_json["address"].GetString():"",
                     contacts_json.HasMember("email")?contacts_json["email"].GetString():""
                 ));
@@ -39,11 +40,10 @@ bool DbManager::DbManager::getContacts(){
 
 bool DbManager::DbManager::putContacts(){
     ofstream file_contacts("contacts.json");
-    
     if(!file_contacts.is_open()) return false;
     for(int x = 0; x < contacts.size(); x++){
         Contact cnt = contacts[x];
-        file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname << "\",\"number\":" << cnt.number;
+        file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname  << "\",\"number\":" << "\"" << cnt.number << "\"";
         if(!cnt.address.empty()) file_contacts << ",\"address\":\"" << cnt.address << "\"";
         if(!cnt.email.empty()) file_contacts << ",\"email\":\"" << cnt.email << "\"";
         file_contacts << "}\n";
