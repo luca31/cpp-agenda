@@ -36,7 +36,7 @@ void Interface::Interface::askForValue(string name, long long int &value){
         cin >> value;
         if(cin.fail()) {
             cin.clear();
-            cin.ignore(1215752191,'\n');
+            cin.ignore(99999,'\n');
             cout << "  -> Il numero inserito non è corretto!" << endl;
         } else {
             cout << endl;
@@ -84,7 +84,7 @@ void Interface::Interface::add(){ // page 2
     string tmp, name, lname, address, email;
     long long int number;
     
-    getline(cin,tmp);
+    getline(cin,tmp);// non ho capito perche la usiamo 
     cout << "AGGIUNGI CONTATTO" << endl << endl;
     askForValue("Nome", name, true);
     askForValue("Cognome", lname, true);
@@ -210,6 +210,7 @@ void Interface::Interface::search(){
             };
         };
         if( it == 0) cout << "Nessun contatto trovato" << endl;
+
     }else if(command == 2){
         string value;
         int it = 0;
@@ -222,7 +223,8 @@ void Interface::Interface::search(){
             };
         };
         if( it == 0) cout << "Nessun contatto trovato" << endl;
-    } else if(command == 3){
+    }
+     else if(command == 3){
         long long int value;
         int it = 0;
         

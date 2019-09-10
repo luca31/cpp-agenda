@@ -36,7 +36,7 @@ int main(){
                 interface.page = 0;
                 break;
         }
-        cout << endl << endl << "~~~~~~~~~~" << endl << endl << endl;
+        
     }
     
     return 0;
