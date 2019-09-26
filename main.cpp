@@ -8,11 +8,6 @@ int main(){
     Interface::Interface interface;
     
     while(interface.page){
-        if(getenv("windir") == NULL){
-            system("clear");
-        }else{
-            system("cls");
-        };
         switch(interface.page){
             case 1:
                 interface.list();
@@ -35,7 +30,12 @@ int main(){
             default:
                 interface.page = 0;
                 break;
-        }
+        };
+        if(getenv("windir") == NULL){
+            system("clear");
+        }else{
+            system("cls");
+        };
         
     }
     

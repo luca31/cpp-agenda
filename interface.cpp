@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
 #include "interface.hpp"
 #include "rapidjson/document.h"
 
@@ -30,7 +29,7 @@ void Interface::Interface::askForValue(string name, string &value, bool needed=f
     }
 }
 
-void Interface::Interface::askForValue(string name, long long int &value){
+void Interface::Interface::askForValue(string name, long long int  &value){
     while (true){
         cout << "*" << name << ": ";
         cin >> value;
@@ -182,62 +181,29 @@ void Interface::Interface::edit(){ // page 5
 }
 
 void Interface::Interface::search(){
-    int command;
+    int command ;
+    string value;
     long size = db.contacts.size();
+    long it = 0;
     
-    cout << "Criterio di ricerca:\n"  << "1:Nome\n" << "2:Cognome\n" << "3:Numero\n";
-    cin >> command;
-    if(cin.fail()){
-        cin.clear();
-        cin.ignore(999,'\n');
-        return;
-    };
+    cout << "Cerca contatto:"<<endl;
+    cin >> value;
     
-    if(getenv("windir") == NULL){
-        system("clear");
-    }else{
-        system("cls");
-    };
-    
-    if(command == 1){
-        string value;
-        int it = 0;
-        askForValue("Nome", value, true);
-        for( long x = 0; x < size; x++){
-            if(db.contacts[x].name == value){
-                cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-                it++;
-            };
+    for( long x = 0; x < size; x++){
+        if(db.contacts[x].name == value){
+            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        }else if(db.contacts[x].lname == value){
+            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        }else if(db.contacts[x].address == value){
+            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        }else if(db.contacts[x].email == value){
+            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
+        }else{ 
+            it++;
         };
-        if( it == 0) cout << "Nessun contatto trovato" << endl;
-
-    }else if(command == 2){
-        string value;
-        int it = 0;
-        
-        askForValue("Cognome", value, true);
-        for( long x = 0; x < size; x++){
-            if(db.contacts[x].lname == value){
-                cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-                it++;
-            };
-        };
-        if( it == 0) cout << "Nessun contatto trovato" << endl;
-    }
-     else if(command == 3){
-        long long int value;
-        int it = 0;
-        
-        askForValue("Numero", value);
-        for( long x = 0; x < size; x++){
-            if(db.contacts[x].number == value){
-                cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-                it++;
-            };  
-        };
-        if( it == 0) cout << "Nessun contatto trovato" << endl;
     };
-    
+    if( it == size ) cout << "Nessun contatto trovato" << endl;
+      
     cout << "----------" << endl;
     cout << "0:Indietro" << endl;
     cin >> command;
