@@ -1,7 +1,4 @@
-#include <iostream>
-#include <string>
 #include "interface.hpp"
-#include "rapidjson/document.h"
 
 using namespace std;
 using namespace rapidjson;
@@ -42,6 +39,15 @@ void Interface::Interface::askForValue(string name, long long int  &value){
             break;
         }
     }
+}
+
+bool Interface::Interface::strEquals(const string& a, const string& b)
+{
+    return equal(a.begin(), a.end(),
+        b.begin(), b.end(),
+        [](char a, char b) {
+            return tolower(a) == tolower(b);
+        });
 }
 
 // PAGES
@@ -137,11 +143,11 @@ void Interface::Interface::remove(){ // page 4
     cin >> command;
     cin.clear();
     cin.ignore(255,'\n');
-    if(command == 's') {
+    if(tolower(command) == 's') {
         db.contacts.erase(db.contacts.begin()+actualContact);
         db.putContacts();
         page = 1;
-    } else if(command == 'n') page = 1;
+    } else if(tolower(command) == 'n') page = 1;
 }
 
 void Interface::Interface::edit(){ // page 5
@@ -180,32 +186,36 @@ void Interface::Interface::edit(){ // page 5
     db.putContacts();
 }
 
-void Interface::Interface::search(){
-    int command ;
+void Interface::Interface::search(){ // page 6
+    int command;
     string value;
-    long size = db.contacts.size();
-    long it = 0;
+    vector<int> found;
     
-    cout << "Cerca contatto:"<<endl;
+    cout << "Inserisci la parola o il numero da ricercare: ";
     cin >> value;
     
-    for( long x = 0; x < size; x++){
-        if(db.contacts[x].name == value){
-            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-        }else if(db.contacts[x].lname == value){
-            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-        }else if(db.contacts[x].address == value){
-            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-        }else if(db.contacts[x].email == value){
-            cout<< x+1 << ": " << db.contacts[x].name << " " << db.contacts[x].lname << endl;
-        }else{ 
-            it++;
+    for(int x = 0; x < db.contacts.size(); x++){
+        if(strEquals(db.contacts[x].name, value) || strEquals(db.contacts[x].lname, value) || value == to_string(db.contacts[x].number) || strEquals(db.contacts[x].address, value) || strEquals(db.contacts[x].email, value)){
+            found.push_back(x);
         };
     };
-    if( it == size ) cout << "Nessun contatto trovato" << endl;
+    
+    if(found.empty()) cout << endl << "Non è stata trovata alcuna corrispondenza" << endl;
+    else {
+        if(found.size()==1) {
+            page = 3;
+            actualContact = found[0];
+            return;
+        } else {
+            cout << endl << found.size() << " contatti trovati" << endl << endl;
+            for(int x = 0; x < found.size();  x++){
+                cout << x+1 << ": " << db.contacts[found[x]].name << " " << db.contacts[found[x]].lname << endl;
+            }
+        }
+    }
       
     cout << "----------" << endl;
-    cout << "0:Indietro" << endl;
+    cout << found.size()+1 << ": Indietro" << endl;
     cin >> command;
 
     if(cin.fail()){
@@ -214,14 +224,14 @@ void Interface::Interface::search(){
         return;
     };
 
-    if(command == 0){
+    if(command == found.size()+1){
         page = 1;
         return;
     }else{
-       for(long x = 0; x < size; x++){
+       for(int x = 0; x < found.size(); x++){
             if(command-1 == x) {
                 page = 3;
-                actualContact = x;
+                actualContact = found[x];
                 return;
             };
         };

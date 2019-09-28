@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include <iostream>
 #include "contact.hpp"
 #include "dbManager.hpp"
 
@@ -19,13 +20,14 @@ public:
     DbManager::DbManager db;
     int actualContact;
     short page;
+    void askForValue(string name, string &value, bool needed);
+    void askForValue(string name, long long int &value);
+    bool strEquals(const string& a, const string& b);
     void list();
     void add();
     void view();
     void remove();
     void edit();
-    void askForValue(string name, string &value, bool needed);
-    void askForValue(string name, long long int &value);
     void search();
 };
 

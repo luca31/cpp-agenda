@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cstdlib>
 #include "interface.hpp"
 
@@ -33,7 +32,7 @@ int main(){
         };
         if(getenv("windir") == NULL){
             system("clear");
-        }else{
+        } else {
             system("cls");
         };
         

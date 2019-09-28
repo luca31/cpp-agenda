@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include "contact.hpp"
 
 using namespace std;

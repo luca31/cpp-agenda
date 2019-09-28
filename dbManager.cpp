@@ -1,8 +1,4 @@
-#include <fstream>
-#include <vector>
-#include <string>
 #include "dbManager.hpp"
-#include "rapidjson/document.h"
 
 using namespace std;
 using namespace rapidjson;
@@ -13,7 +9,7 @@ bool DbManager::DbManager::getContacts(){
     
     if(!file_contacts.is_open()){
         ofstream new_file_contacts("contacts.json");
-        if(!new_file_contacts.is_open()) return false; // qui non ho capito, quindi me lo potresti spiegare
+        if(!new_file_contacts.is_open()) return false;
         new_file_contacts << "";
         new_file_contacts.close();
     } else {

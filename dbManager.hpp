@@ -3,7 +3,10 @@
 
 #include <stdio.h>
 #include <vector>
+#include <fstream>
+#include <string>
 #include "contact.hpp"
+#include "rapidjson/document.h"
 
 namespace DbManager{
     class DbManager;

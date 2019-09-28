@@ -9,7 +9,7 @@ class Contact {
     public:
         string name, lname, address, email;
         long long int number;
-        Contact(string newName, string newLname, long long int  newNumber, string newAddress, string newEmail);
+        Contact(string newName, string newLname, long long int newNumber, string newAddress, string newEmail);
 };
 
 #endif
