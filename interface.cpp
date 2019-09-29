@@ -1,7 +1,6 @@
 #include "interface.hpp"
 
 using namespace std;
-using namespace rapidjson;
 
 Interface::Interface::Interface(void) {
     if(!db.getContacts()) {
