@@ -1,5 +1,6 @@
 #include "interface.hpp"
 
+
 using namespace std;
 
 Interface::Interface::Interface(void) {
@@ -40,13 +41,16 @@ void Interface::Interface::askForValue(string name, long long int  &value){
     }
 }
 
-bool Interface::Interface::strEquals(const string& a, const string& b)
-{
-    return equal(a.begin(), a.end(),
-        b.begin(), b.end(),
-        [](char a, char b) {
-            return tolower(a) == tolower(b);
-        });
+bool Interface::Interface::strEquals(const string& a, const string& b){
+    int count = 0;
+    if (a.length() == b.length()){
+        for(int i = 0; i <a.length(); i ++){
+            if(tolower(a[i]) == tolower(b[i])) count++ ;
+        };
+
+        if( count == a.length()) return true;
+        else return false;
+    };
 }
 
 // PAGES
@@ -146,7 +150,10 @@ void Interface::Interface::remove(){ // page 4
         db.contacts.erase(db.contacts.begin()+actualContact);
         db.putContacts();
         page = 1;
-    } else if(tolower(command) == 'n') page = 1;
+    } else if(tolower(command) == 'n') {
+        cout << tolower(command);
+        page = 1;
+    }
 }
 
 void Interface::Interface::edit(){ // page 5
@@ -194,7 +201,7 @@ void Interface::Interface::search(){ // page 6
     cin >> value;
     
     for(int x = 0; x < db.contacts.size(); x++){
-        if(strEquals(db.contacts[x].name, value) || strEquals(db.contacts[x].lname, value) || value == to_string(db.contacts[x].number) || strEquals(db.contacts[x].address, value) || strEquals(db.contacts[x].email, value)){
+        if(strEquals(db.contacts[x].name,value) || strEquals(db.contacts[x].lname,value) || value == to_string(db.contacts[x].number) || strEquals(db.contacts[x].address,value) || strEquals(db.contacts[x].email,value)){
             found.push_back(x);
         };
     };

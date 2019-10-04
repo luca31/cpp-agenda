@@ -1,10 +1,10 @@
 #ifndef interface_hpp
 #define interface_hpp
 
-#include <stdio.h>
+#include <iostream>
+#include <stdio.h> 
 #include <vector>
 #include <string>
-#include <iostream>
 #include "contact.hpp"
 #include "dbManager.hpp"
 
