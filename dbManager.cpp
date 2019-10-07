@@ -5,6 +5,7 @@
 using namespace std;
 using namespace rapidjson;
 
+
 bool DbManager::DbManager::getContacts(){
     string contact;
     ifstream file_contacts("contacts.json");
@@ -39,6 +40,7 @@ bool DbManager::DbManager::getContacts(){
 
 void DbManager::DbManager::sortContacts(){
     string list_name[contacts.size()];
+
     vector<Contact> con;
     int size_list = sizeof(list_name)/sizeof(list_name[0]);
     
@@ -52,6 +54,7 @@ void DbManager::DbManager::sortContacts(){
         for(int y = 0; y< contacts.size(); y++){
             if( list_name[i] == con[y].name){
                 contacts[i] = con[y];
+                con[y].name = "";
                 break;
             };
         };
