@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <bits/stdc++.h> 
 #include <fstream>
 #include <string>
 #include "contact.hpp"
@@ -16,7 +17,9 @@ class DbManager::DbManager {
 public:
     std::vector<Contact> contacts;
     bool getContacts();
+    void sortContacts();
     bool putContacts();
+
 };
 
 #endif

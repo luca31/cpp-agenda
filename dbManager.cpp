@@ -20,6 +20,7 @@ bool DbManager::DbManager::getContacts(){
             strcpy(line, contact.c_str());
             Document contacts_json;
             contacts_json.Parse(line);
+            
             if(contacts_json.IsObject()) {
                 contacts.push_back(Contact(
                     contacts_json["name"].GetString(),
@@ -36,9 +37,32 @@ bool DbManager::DbManager::getContacts(){
     return true;
 }
 
+void DbManager::DbManager::sortContacts(){
+    string list_name[contacts.size()];
+    vector<Contact> con;
+    int size_list = sizeof(list_name)/sizeof(list_name[0]);
+    
+    for(int i = 0; i< contacts.size(); i++){
+        list_name[i] = contacts[i].name;
+        con.push_back(contacts[i]);
+    };
+
+    sort(list_name, list_name + size_list);
+    for(int i = 0; i< contacts.size(); i++){
+        for(int y = 0; y< contacts.size(); y++){
+            if( list_name[i] == con[y].name){
+                contacts[i] = con[y];
+                break;
+            };
+        };
+    };
+}
+
+
 bool DbManager::DbManager::putContacts(){
     ofstream file_contacts("contacts.json");
     if(!file_contacts.is_open()) return false;
+    sortContacts();
     for(int x = 0; x < contacts.size(); x++){
         Contact cnt = contacts[x];
         file_contacts << "{\"name\":\"" << cnt.name << "\",\"lname\":\"" << cnt.lname  << "\",\"number\":" << "\"" << cnt.number << "\"";

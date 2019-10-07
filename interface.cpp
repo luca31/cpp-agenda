@@ -151,7 +151,6 @@ void Interface::Interface::remove(){ // page 4
         db.putContacts();
         page = 1;
     } else if(tolower(command) == 'n') {
-        cout << tolower(command);
         page = 1;
     }
 }
