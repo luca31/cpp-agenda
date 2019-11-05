@@ -26,7 +26,7 @@ bool DbManager::DbManager::getContacts(){
                 contacts.push_back(Contact(
                     contacts_json["name"].GetString(),
                     contacts_json["lname"].GetString(),
-                    stoll(contacts_json["number"].GetString()),
+                    contacts_json["number"].GetString(),
                     contacts_json.HasMember("address")?contacts_json["address"].GetString():"",
                     contacts_json.HasMember("email")?contacts_json["email"].GetString():""
                 ));
