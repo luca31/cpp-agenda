@@ -26,20 +26,6 @@ void Interface::Interface::askForValue(string name, string &value, bool needed=f
     }
 }
 
-void Interface::Interface::askForValue(string name, long long int  &value){
-    while (true){
-        cout << "*" << name << ": ";
-        cin >> value;
-        if(cin.fail()) {
-            cin.clear();
-            cin.ignore(99999,'\n');
-            cout << "  -> Il numero inserito non è corretto!" << endl;
-        } else {
-            cout << endl;
-            break;
-        }
-    }
-}
 
 bool Interface::Interface::strEquals(const string& a, const string& b){
     int count = 0;
@@ -89,14 +75,13 @@ void Interface::Interface::list(){ // page 1
 }
 
 void Interface::Interface::add(){ // page 2
-    string tmp, name, lname, address, email;
-    long long int number;
+    string tmp, name, lname, address, email, number;
     
     getline(cin,tmp);// non ho capito perche la usiamo 
     cout << "AGGIUNGI CONTATTO" << endl << endl;
     askForValue("Nome", name, true);
     askForValue("Cognome", lname, true);
-    askForValue("Numero di telefono", number);
+    askForValue("Numero di telefono", number, true);
     getline(cin,tmp);
     askForValue("Indirizzo di casa", address);
     askForValue("Indirizzo email", email);
@@ -184,7 +169,7 @@ void Interface::Interface::edit(){ // page 5
     getline(cin,tmp);
     if(command == 1) askForValue("Nome", db.contacts[actualContact].name, true);
     else if(command == 2) askForValue("Cognome", db.contacts[actualContact].lname, true);
-    else if(command == 3) askForValue("Numero di telefono", db.contacts[actualContact].number);
+    else if(command == 3) askForValue("Numero di telefono", db.contacts[actualContact].number, true);
     else if(command == 4) askForValue("Indirizzo di casa", db.contacts[actualContact].address, false);
     else if(command == 5) askForValue("Indirizzo email", db.contacts[actualContact].email, false);
     else return;
@@ -200,7 +185,7 @@ void Interface::Interface::search(){ // page 6
     cin >> value;
     
     for(int x = 0; x < db.contacts.size(); x++){
-        if(strEquals(db.contacts[x].name,value) || strEquals(db.contacts[x].lname,value) || value == to_string(db.contacts[x].number) || strEquals(db.contacts[x].address,value) || strEquals(db.contacts[x].email,value)){
+        if(strEquals(db.contacts[x].name,value) || strEquals(db.contacts[x].lname,value) || strEquals(db.contacts[x].number, value) || strEquals(db.contacts[x].address,value) || strEquals(db.contacts[x].email,value)){
             found.push_back(x);
         };
     };
